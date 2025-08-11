@@ -7,8 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet">
-    <style>
-        body {
+    <style>body {
             font-family: Arial, sans-serif;
             max-width: 100%;
             margin: auto;
@@ -124,6 +123,15 @@ hr {
     -1px 1px 0 #fff,
     1px 1px 0 #fff;
         }
+        
+        .delete-btn, #hapus-semua-btn {
+            background-color: red;
+            color: white;
+            border: 1px black solid;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -135,6 +143,8 @@ hr {
         <input type="text" id="nama-pendaftar" placeholder="Masukkan nama Anda" required>
         <button type="submit">Daftar</button>
     </form>
+    
+    <button id="hapus-semua-btn">Hapus Semua Pendaftar</button>
 
     <p id="pesan-status"></p>
 
@@ -144,13 +154,13 @@ hr {
             <tr>
                 <th>No</th>
                 <th>Nama Pemain</th>
+                <th>Aksi</th>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
 </div>
-
 
     <hr>
 
@@ -164,7 +174,7 @@ hr {
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const URL_APPS_SCRIPT_ANDA = 'https://script.google.com/macros/s/AKfycbzJOkRvOLJqBXzkOFZzFcZSvoIXiPF4KtJ2QgvKV3KJnM--7gZOHyZKaxFiFpgYdS7iFw/exec'; // Ganti dengan URL Anda
+            const URL_APPS_SCRIPT_ANDA = 'https://script.google.com/macros/s/AKfycby1MFQ1vqjv9XBZrS0u9xG6XEjtxqWNHlojc1F_fBcVpylOsUp2mXdNdvcO32YOXnePcQ/exec'; // Ganti dengan URL Anda
 
             const totalHarga = 234000;
             const tableBody = document.querySelector('#daftar-pendaftar tbody');
@@ -172,22 +182,29 @@ hr {
             const patunganPerOrangSpan = document.getElementById('patungan-per-orang');
             const formPendaftaran = document.getElementById('form-pendaftaran');
             const pesanStatus = document.getElementById('pesan-status');
+            const hapusSemuaBtn = document.getElementById('hapus-semua-btn');
 
             function muatDaftarPendaftar() {
-                // Hapus data lama di tabel
-                tableBody.innerHTML = '<tr><td colspan="2">Loading data dari Google Sheets...</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="3">Loading data dari Google Sheets...</td></tr>';
                 
                 fetch(URL_APPS_SCRIPT_ANDA)
                     .then(response => response.json())
                     .then(data => {
-                        tableBody.innerHTML = ''; // Kosongkan tabel
+                        tableBody.innerHTML = '';
                         if (data && data.length > 0) {
                             data.forEach((pendaftar, index) => {
                                 const row = tableBody.insertRow();
                                 const noCell = row.insertCell(0);
                                 const namaCell = row.insertCell(1);
+                                const aksiCell = row.insertCell(2);
                                 noCell.textContent = index + 1;
-                                namaCell.textContent = pendaftar['Nama']; // Ganti 'Nama' sesuai header kolom Anda
+                                namaCell.textContent = pendaftar['Nama'];
+                                
+                                const deleteButton = document.createElement('button');
+                                deleteButton.textContent = 'Hapus';
+                                deleteButton.className = 'delete-btn';
+                                deleteButton.onclick = () => hapusPendaftar(pendaftar['Nama']);
+                                aksiCell.appendChild(deleteButton);
                             });
     
                             const jumlahPendaftar = data.length;
@@ -196,28 +213,64 @@ hr {
                             jumlahPendaftarSpan.textContent = jumlahPendaftar;
                             patunganPerOrangSpan.textContent = `Rp ${patunganPerOrang.toLocaleString('id-ID')}`;
                         } else {
-                            tableBody.innerHTML = '<tr><td colspan="2">Tidak ada pendaftar.</td></tr>';
+                            tableBody.innerHTML = '<tr><td colspan="3">Tidak ada pendaftar.</td></tr>';
                             jumlahPendaftarSpan.textContent = 0;
                             patunganPerOrangSpan.textContent = `Rp 0`;
                         }
                     })
                     .catch(error => {
                         console.error('Error fetching data:', error);
-                        tableBody.innerHTML = '<tr><td colspan="2">Gagal memuat data. Periksa URL Apps Script Anda.</td></tr>';
+                        tableBody.innerHTML = '<tr><td colspan="3">Gagal memuat data. Periksa URL Apps Script Anda.</td></tr>';
                     });
             }
 
-            // Panggil fungsi untuk memuat data saat halaman pertama kali dibuka
+            function hapusPendaftar(nama) {
+                if (!confirm(`Apakah Anda yakin ingin menghapus pendaftar "${nama}"?`)) {
+                    return;
+                }
+                pesanStatus.textContent = `Menghapus pendaftar "${nama}"...`;
+                
+                fetch(URL_APPS_SCRIPT_ANDA + `?action=delete&nama=${encodeURIComponent(nama)}`, {
+                    method: 'POST',
+                })
+                .then(response => response.text())
+                .then(result => {
+                    pesanStatus.textContent = result;
+                    muatDaftarPendaftar();
+                })
+                .catch(error => {
+                    console.error('Error deleting data:', error);
+                    pesanStatus.textContent = 'Gagal menghapus pendaftar.';
+                });
+            }
+
+            function hapusSemuaPendaftar() {
+                if (!confirm('Apakah Anda yakin ingin menghapus SEMUA pendaftar?')) {
+                    return;
+                }
+                pesanStatus.textContent = 'Menghapus semua pendaftar...';
+
+                fetch(URL_APPS_SCRIPT_ANDA + `?action=deleteAll`, {
+                    method: 'POST',
+                })
+                .then(response => response.text())
+                .then(result => {
+                    pesanStatus.textContent = result;
+                    muatDaftarPendaftar();
+                })
+                .catch(error => {
+                    console.error('Error deleting all data:', error);
+                    pesanStatus.textContent = 'Gagal menghapus semua pendaftar.';
+                });
+            }
+
             muatDaftarPendaftar();
             
-            // Tangani pengiriman formulir
             formPendaftaran.addEventListener('submit', function(event) {
                 event.preventDefault();
-
                 const namaPendaftar = document.getElementById('nama-pendaftar').value;
                 pesanStatus.textContent = 'Menambahkan pendaftar...';
 
-                // Kirim data ke Google Apps Script
                 fetch(URL_APPS_SCRIPT_ANDA, {
                     method: 'POST',
                     body: JSON.stringify({ nama: namaPendaftar }),
@@ -226,13 +279,15 @@ hr {
                 .then(result => {
                     pesanStatus.textContent = result;
                     document.getElementById('nama-pendaftar').value = '';
-                    muatDaftarPendaftar(); // Muat ulang daftar setelah pendaftaran
+                    muatDaftarPendaftar();
                 })
                 .catch(error => {
                     console.error('Error submitting data:', error);
                     pesanStatus.textContent = 'Gagal menambahkan pendaftar.';
                 });
             });
+
+            hapusSemuaBtn.addEventListener('click', hapusSemuaPendaftar);
         });
     </script>
 
