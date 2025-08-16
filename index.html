@@ -8,9 +8,10 @@
     <meta property="og:url" content="https://bimawest.github.io/Pomo/" />
     <meta property="og:image:alt" content="PB. POMO" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet">
-    <style>body {
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet">
+    <style>
+        body {
             font-family: Arial, sans-serif;
             max-width: 100%;
             margin: auto;
@@ -20,96 +21,236 @@
             justify-items: center;
         }
         
-        .pomo {
-          width: 95%;
-          height: 100%;
-          background-color: rgba(225, 225, 225, 0.1);
-          backdrop-filter: blur(1.5px);
-          color: white;
-          outline: 3px black dashed;
-          border-radius: 25px;
-          padding: 3px;
-          margin-top: 5%;
+        .shuttlecock, .kok {
+          position: relative;
+          top: 100px;
         }
         
+        .kok {
+            display: flex;
+            flex-direction: columns;
+            gap: 50px;
+            width: 200px;
+            height: 50px;
+            margin-bottom: 20px;
+        }
+        
+        .bulu1 {
+            background-color: steelblue;
+            border: 5px black solid;
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            transform: rotate(-35deg);
+        }
+        
+        .bulu2 {
+            background-color: steelblue;
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            border: 5px black solid;
+        }
+        
+        .bulu3 {
+            background-color: steelblue;
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            transform: rotate(35deg);
+            border: 5px black solid;
+        }
+
+        .semitriangle {
+            height: 120px;
+            width: 100px;
+            background-color: steelblue;
+            margin-bottom: 5px;
+            margin-left: 50px;
+            border: 5px black solid;
+            clip-path: polygon(0% 0, 100% 0, 75% 100%, 25% 100%);
+            display: flex;
+            flex-direction: columns;
+        }
+        
+        .line1, .line3 {
+            width: 2px;
+            height: 70px;
+            background-color: black;
+            margin-left: 20px;
+        }
+        
+        .line2 {
+            width: 2px;
+            height: 100px;
+            background-color: black;
+            margin-left: 20px;
+        }
+        
+        .line4 {
+            width: 50px;
+            height: 2px;
+            background-color: black;
+            right: 550px;
+        }
+
+        .semicircle {
+            width: 60px;
+            height: 60px;
+            background-color: steelblue;
+            border-bottom-left-radius: 100px;
+            border-bottom-right-radius: 100px;
+            border: 5px black solid;
+            margin-left: 70px;
+        }
+
+        .anim {
+            position: relative;
+            height: 50px;
+            animation: bounce 2s infinite ease-in-out;
+        }
+
+        @keyframes bounce {
+            0% {
+                top: 0;
+            }
+            
+            50% {
+                top: 50px;
+            }
+            100% {
+                top: 0;
+            }
+        }
+
+        .bayangan {
+            position: fixed;
+            width: 200px;
+            height: 50px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            top: 400px;
+            animation: ukuran 2s infinite ease-in-out;
+            z-index: -1;
+            margin-left: 80px;
+        }
+        
+        @keyframes ukuran {
+            0% {
+                scale: 0.3;
+            }
+            
+            50% {
+                scale: 1.3;
+            }
+            100% {
+                scale: 0.3;
+            }
+        }
+
+        #loading-text {
+            position: fixed;
+            color: white;
+            font-size: 1.5rem;
+            margin-top: 410px;
+            margin-left: 80px;
+        }
+
+        .pomo {
+            width: 95%;
+            height: 100%;
+            background-color: rgb(107, 106, 106);
+            backdrop-filter: blur(5px);
+            color: white;
+            outline: 3px black dashed;
+            border-radius: 25px;
+            padding: 3px;
+            margin-top: 5%;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.5s ease-in, transform 0.5s ease-in;
+        }
+
+        .pomo.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
         h1 {
-          font-family: "Trade Winds";
-          font-style: italic;
+            font-family: "Trade Winds";
+            font-style: italic;
         }
 
         h1, h2 {
             color: white;
             margin: 5px;
             text-shadow: 
-    -1px -1px 0 #000,  
-    1px -1px 0 #000,
-    -1px 1px 0 #000,
-    1px 1px 0 #000;
+                -1px -1px 0 #000,  
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                1px 1px 0 #000;
         }
+
         form {
             margin-bottom: 20px;
             margin: 5px;
         }
         
         #tabel-container {
-    max-height: 250px; /* Adjust this value as needed */
-    width: 90%;
-    overflow-y: scroll;
-    border: 1px solid #ddd; /* Optional: adds a border to the container */
-    margin-top: 20px;
-    margin: 5px;
-}
+            max-height: 250px;
+            width: 90%;
+            overflow-y: scroll;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+            margin: 5px;
+        }
 
-hr {
-  width: 80%;
-  margin: 5px;
-}
+        hr {
+            width: 80%;
+            margin: 5px;
+        }
 
-/* Lebar scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-}
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
 
-/* Warna latar belakang scrollbar */
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
 
-/* Warna "jempol" scrollbar (bagian yang dapat digeser) */
-::-webkit-scrollbar-thumb {
-  background: #888;
-}
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+        }
 
+        #daftar-pendaftar {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-#daftar-pendaftar {
-    width: 100%;
-    border-collapse: collapse;
-}
+        #daftar-pendaftar th,
+        #daftar-pendaftar td {
+            color: #000;
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            text-shadow: 
+                -1px -1px 0 #fff,  
+                1px -1px 0 #fff,
+                -1px 1px 0 #fff,
+                1px 1px 0 #fff;
+        }
 
-#daftar-pendaftar th,
-#daftar-pendaftar td {
-    color: #000;
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-    text-shadow: 
-    -1px -1px 0 #fff,  
-    1px -1px 0 #fff,
-    -1px 1px 0 #fff,
-    1px 1px 0 #fff;
-}
+        #daftar-pendaftar td {
+            font-family: Comic Sans MS;
+            font-size: 1.1rem;
+        }
 
-#daftar-pendaftar td {
-  font-family: cursive;
-  font-size: 1.1rem;
-}
-
-#daftar-pendaftar th {
-    background-color: #333;
-    position: sticky;
-    top: 0;
-    z-index: 1; /* Ensures the header stays on top of the scrolling content */
-}
+        #daftar-pendaftar th {
+            background-color: #333;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
 
         .highlight, .duit {
             font-weight: bold;
@@ -117,17 +258,18 @@ hr {
         }
         
         p {
-          font-size: 1.1rem;
-          color: #000;
-          margin: 5px;
-          text-shadow: 
-    -1px -1px 0 #fff,  
-    1px -1px 0 #fff,
-    -1px 1px 0 #fff,
-    1px 1px 0 #fff;
+            font-size: 1.1rem;
+            color: #000;
+            margin: 5px;
+            text-shadow: 
+                -1px -1px 0 #fff,  
+                1px -1px 0 #fff,
+                -1px 1px 0 #fff,
+                1px 1px 0 #fff;
         }
         
-        .delete-btn, #hapus-semua-btn {
+        /* Tombol hapus per pendaftar akan selalu terlihat */
+        .delete-btn {
             background-color: red;
             color: white;
             border: 1px black solid;
@@ -135,78 +277,182 @@ hr {
             cursor: pointer;
             border-radius: 5px;
         }
+        
+        #input-admin {
+            margin: 5px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 90%;
+        }
+        
+        /* Tombol hapus semua akan disembunyikan secara default */
+        #hapus-semua-btn {
+            background-color: red;
+            color: white;
+            border: 1px black solid;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            display: none;
+        }
     </style>
 </head>
 <body>
+    <section id="loading-overlay" class="anim">
+        <section class="kok">
+            <div class="bulu1"></div>
+            <div class="bulu2"></div>
+            <div class="bulu3"></div>
+        </section>
+        <section class="shuttlecock">
+            <div class="semitriangle">
+                <hr class="line1">
+                <hr class="line2">
+                <hr class="line3">
+            </div>
+            <div class="semicircle">
+                <hr class="line4">
+            </div>
+        </section>
+    </section>
+    <div class="bayangan"></div>
+    <div id="loading-text" style="text-shadow: 
+                -1px -1px 0 #000,  
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                1px 1px 0 #000;">Sedang memuat...</div>
   
-<section class="pomo">
-    <h1>PB. POMO Kuala</h1>
+    <section class="pomo">
+        <h1>PB. POMO Kuala</h1>
+        <p id="tanggal-main" style="color: white; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;"></p>
+        
+        <p>Login sebagai admin:</p>
+        <input type="text" id="input-admin" placeholder="Masukkan nama admin (misal: Bima)">
 
-    <form id="form-pendaftaran">
-        <input type="text" id="nama-pendaftar" placeholder="Masukkan nama Anda" required>
-        <button type="submit">Daftar</button>
-    </form>
-    
-    <button id="hapus-semua-btn">Hapus Semua Pendaftar</button>
+        <form id="form-pendaftaran">
+            <input type="text" id="nama-pendaftar" placeholder="Masukkan nama Anda" required>
+            <input type="text" id="kode-unik-pendaftar" placeholder="Buat kode unik Anda" required>
+            <button type="submit">Daftar</button>
+        </form>
+        
+        <button id="hapus-semua-btn">Hapus Semua Pendaftar</button>
 
-    <p id="pesan-status"></p>
+        <p id="pesan-status"></p>
 
-    <div id="tabel-container">
-    <table id="daftar-pendaftar">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Nama Pemain</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-</div>
+        <div id="tabel-container">
+            <table id="daftar-pendaftar">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Pemain</th>
+                        <th>Kode Unik</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
 
-    <hr>
+        <hr>
 
-    <h2>Kalkulator Patungan</h2>
-    <p>lapangan: <span class="duit">Rp 100.000</span></p>
-    <p>shuttlecock: <span class="duit">Rp 134.000</span></p>
-    <p>Total harga: <span class="highlight">Rp 234.000</span></p>
-    <p>Jumlah pemain: <span id="jumlah-pendaftar" class="highlight">0</span> orang</p>
-    <p>Patungan per orang: <span id="patungan-per-orang" class="highlight">Rp 0</span></p>
-</section>
+        <h2>Kalkulator Patungan</h2>
+        <p>lapangan: <span id="harga-lapangan" class="duit">Rp 100.000</span></p>
+        <p>shuttlecock: <span id="harga-shuttlecock" class="duit">Rp 135.000</span></p>
+        <p>Total harga: <span id="total-harga" class="highlight">Rp</span></p>
+        <p>Jumlah pemain: <span id="jumlah-pendaftar" class="highlight">0</span> orang</p>
+        <p>Patungan per orang: <span id="patungan-per-orang" class="highlight">Rp 0</span></p>
+    </section>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const URL_APPS_SCRIPT_ANDA = 'https://script.google.com/macros/s/AKfycby1MFQ1vqjv9XBZrS0u9xG6XEjtxqWNHlojc1F_fBcVpylOsUp2mXdNdvcO32YOXnePcQ/exec'; // Ganti dengan URL Anda
+            const URL_APPS_SCRIPT_ANDA = 'https://script.google.com/macros/s/AKfycby1MFQ1vqjv9XBZrS0u9xG6XEjtxqWNHlojc1F_fBcVpylOsUp2mXdNdvcO32YOXnePcQ/exec';
+            const ADMIN_NAMA = 'BimasaaayanggAlya';
 
-            const totalHarga = 234000;
+            const hargaLapangan = 100000;
+            const hargaShuttlecock = 135000;
+            const totalHarga = hargaLapangan + hargaShuttlecock;
+            
+            let dataPendaftarSaatIni = [];
+            
+            const tampilkanHarga = (elementId, harga) => {
+              const element = document.getElementById(elementId);
+              if (element) {
+                element.textContent = `Rp ${harga.toLocaleString('id-ID')}`;
+              }
+            };
+
+            tampilkanHarga('total-harga', totalHarga);
+            tampilkanHarga('harga-lapangan', hargaLapangan);
+            tampilkanHarga('harga-shuttlecock', hargaShuttlecock);
+
+            const hariIni = new Date();
+            const hariSaatIni = hariIni.getDay();
+            const hariTarget = 6;
+
+            let hariUntukDitambahkan = hariTarget - hariSaatIni;
+            if (hariUntukDitambahkan <= 0) {
+              hariUntukDitambahkan += 0;
+            }
+
+            const tanggalMain = new Date(hariIni);
+            tanggalMain.setDate(hariIni.getDate() + hariUntukDitambahkan);
+            
+            const opsiFormat = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            const tanggalMainFormat = tanggalMain.toLocaleDateString('id-ID', opsiFormat);
+            
+            const tanggalMainElement = document.getElementById('tanggal-main');
+            if (tanggalMainElement) {
+              tanggalMainElement.textContent = `Tanggal main: ${tanggalMainFormat}, jam 8 PM`;
+            }
+
             const tableBody = document.querySelector('#daftar-pendaftar tbody');
             const jumlahPendaftarSpan = document.getElementById('jumlah-pendaftar');
             const patunganPerOrangSpan = document.getElementById('patungan-per-orang');
             const formPendaftaran = document.getElementById('form-pendaftaran');
             const pesanStatus = document.getElementById('pesan-status');
             const hapusSemuaBtn = document.getElementById('hapus-semua-btn');
+            const inputAdmin = document.getElementById('input-admin');
+            
+            const pomoSection = document.querySelector('.pomo');
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const shadow = document.querySelector('.bayangan');
+            const text = document.getElementById('loading-text')
 
+            // Fungsi untuk menampilkan tombol hapus semua (hanya untuk admin)
+            function tampilkanTombolHapusSemua() {
+                const isAdmin = inputAdmin.value.toLowerCase() === ADMIN_NAMA.toLowerCase();
+                hapusSemuaBtn.style.display = isAdmin ? 'inline-block' : 'none';
+            }
+            
             function muatDaftarPendaftar() {
-                tableBody.innerHTML = '<tr><td colspan="3">Loading data dari Google Sheets...</td></tr>';
-                
+                loadingOverlay.style.display = 'block';
+                shadow.style.display = 'block';
+                pomoSection.classList.remove('show');
+
                 fetch(URL_APPS_SCRIPT_ANDA)
                     .then(response => response.json())
                     .then(data => {
+                        dataPendaftarSaatIni = data;
                         tableBody.innerHTML = '';
                         if (data && data.length > 0) {
                             data.forEach((pendaftar, index) => {
                                 const row = tableBody.insertRow();
                                 const noCell = row.insertCell(0);
                                 const namaCell = row.insertCell(1);
-                                const aksiCell = row.insertCell(2);
+                                const kodeUnikCell = row.insertCell(2);
+                                const aksiCell = row.insertCell(3);
+
                                 noCell.textContent = index + 1;
                                 namaCell.textContent = pendaftar['Nama'];
+                                kodeUnikCell.textContent = pendaftar['Kode Unik'];
                                 
                                 const deleteButton = document.createElement('button');
                                 deleteButton.textContent = 'Hapus';
                                 deleteButton.className = 'delete-btn';
-                                deleteButton.onclick = () => hapusPendaftar(pendaftar['Nama']);
+                                deleteButton.id = `hapus-${pendaftar['Nama'].replace(/\s/g, '-')}`;
+                                deleteButton.onclick = () => hapusPendaftar(pendaftar['Nama'], pendaftar['Kode Unik']);
                                 aksiCell.appendChild(deleteButton);
                             });
     
@@ -216,35 +462,48 @@ hr {
                             jumlahPendaftarSpan.textContent = jumlahPendaftar;
                             patunganPerOrangSpan.textContent = `Rp ${patunganPerOrang.toLocaleString('id-ID')}`;
                         } else {
-                            tableBody.innerHTML = '<tr><td colspan="3">Tidak ada pendaftar.</td></tr>';
+                            tableBody.innerHTML = '<tr><td colspan="4">belum ada pendaftar.</td></tr>';
                             jumlahPendaftarSpan.textContent = 0;
                             patunganPerOrangSpan.textContent = `Rp 0`;
                         }
+                        tampilkanTombolHapusSemua();
                     })
                     .catch(error => {
                         console.error('Error fetching data:', error);
-                        tableBody.innerHTML = '<tr><td colspan="3">Gagal memuat data. Periksa URL Apps Script Anda.</td></tr>';
+                        tableBody.innerHTML = '<tr><td colspan="4">Gagal memuat data. Periksa URL Apps Script Anda.</td></tr>';
+                    })
+                    .finally(() => {
+                        loadingOverlay.style.display = 'none';
+                        shadow.style.display = 'none';
+                        pomoSection.classList.add('show');
+                        text.style.display = 'none'
                     });
             }
 
-            function hapusPendaftar(nama) {
-                if (!confirm(`Apakah Anda yakin ingin menghapus pendaftar "${nama}"?`)) {
+            function hapusPendaftar(nama, kodeUnik) {
+                const konfirmasi = prompt(`Untuk menghapus pendaftar ${nama}, masukkan kode uniknya:`);
+                if (konfirmasi === null) {
                     return;
                 }
-                pesanStatus.textContent = `Menghapus pendaftar "${nama}"...`;
                 
-                fetch(URL_APPS_SCRIPT_ANDA + `?action=delete&nama=${encodeURIComponent(nama)}`, {
-                    method: 'POST',
-                })
-                .then(response => response.text())
-                .then(result => {
-                    pesanStatus.textContent = result;
-                    muatDaftarPendaftar();
-                })
-                .catch(error => {
-                    console.error('Error deleting data:', error);
-                    pesanStatus.textContent = 'Gagal menghapus pendaftar.';
-                });
+                if (konfirmasi.toLowerCase() === kodeUnik.toLowerCase()) {
+                    pesanStatus.textContent = `Menghapus pendaftar "${nama}"...`;
+                    
+                    fetch(URL_APPS_SCRIPT_ANDA + `?action=delete&nama=${encodeURIComponent(nama)}`, {
+                        method: 'POST',
+                    })
+                    .then(response => response.text())
+                    .then(result => {
+                        pesanStatus.textContent = result;
+                        muatDaftarPendaftar();
+                    })
+                    .catch(error => {
+                        console.error('Error deleting data:', error);
+                        pesanStatus.textContent = 'Gagal menghapus pendaftar.';
+                    });
+                } else {
+                    pesanStatus.textContent = 'Kode unik salah. Penghapusan dibatalkan.';
+                }
             }
 
             function hapusSemuaPendaftar() {
@@ -271,17 +530,38 @@ hr {
             
             formPendaftaran.addEventListener('submit', function(event) {
                 event.preventDefault();
-                const namaPendaftar = document.getElementById('nama-pendaftar').value;
+                const namaPendaftar = document.getElementById('nama-pendaftar').value.trim();
+                const kodeUnikPendaftar = document.getElementById('kode-unik-pendaftar').value.trim();
+
+                if (!namaPendaftar || !kodeUnikPendaftar) {
+                    alert('Nama dan kode unik tidak boleh kosong.');
+                    return;
+                }
+
+                const namaSudahAda = dataPendaftarSaatIni.some(pendaftar => pendaftar['Nama'].toLowerCase() === namaPendaftar.toLowerCase());
+                const kodeUnikSudahAda = dataPendaftarSaatIni.some(pendaftar => pendaftar['Kode Unik'].toLowerCase() === kodeUnikPendaftar.toLowerCase());
+
+                if (namaSudahAda) {
+                    alert('Nama ini sudah terdaftar. Silakan gunakan nama lain atau hapus data yang sudah ada.');
+                    return;
+                }
+                
+                if (kodeUnikSudahAda) {
+                    alert('Kode unik ini sudah digunakan. Silakan gunakan kode unik lain.');
+                    return;
+                }
+
                 pesanStatus.textContent = 'Menambahkan pendaftar...';
 
                 fetch(URL_APPS_SCRIPT_ANDA, {
                     method: 'POST',
-                    body: JSON.stringify({ nama: namaPendaftar }),
+                    body: JSON.stringify({ nama: namaPendaftar, kodeUnik: kodeUnikPendaftar }),
                 })
                 .then(response => response.text())
                 .then(result => {
                     pesanStatus.textContent = result;
                     document.getElementById('nama-pendaftar').value = '';
+                    document.getElementById('kode-unik-pendaftar').value = '';
                     muatDaftarPendaftar();
                 })
                 .catch(error => {
@@ -290,9 +570,9 @@ hr {
                 });
             });
 
+            inputAdmin.addEventListener('input', tampilkanTombolHapusSemua);
             hapusSemuaBtn.addEventListener('click', hapusSemuaPendaftar);
         });
     </script>
-
 </body>
 </html>
