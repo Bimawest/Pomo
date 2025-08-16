@@ -20,7 +20,8 @@
             background-repeat: no-repeat;
             justify-items: center;
         }
-        
+
+        /* Gaya untuk overlay loading */
         .shuttlecock, .kok {
           position: relative;
           top: 100px;
@@ -156,6 +157,7 @@
             margin-left: 80px;
         }
 
+        /* Gaya untuk konten utama */
         .pomo {
             width: 95%;
             height: 100%;
@@ -166,6 +168,8 @@
             border-radius: 25px;
             padding: 3px;
             margin-top: 5%;
+            
+            /* Sembunyikan dan beri animasi */
             opacity: 0;
             transform: scale(0.95);
             transition: opacity 0.5s ease-in, transform 0.5s ease-in;
@@ -268,33 +272,13 @@
                 1px 1px 0 #fff;
         }
         
-        /* Tombol hapus per pendaftar akan selalu terlihat */
-        .delete-btn {
+        .delete-btn, #hapus-semua-btn {
             background-color: red;
             color: white;
             border: 1px black solid;
             padding: 5px 10px;
             cursor: pointer;
             border-radius: 5px;
-        }
-        
-        #input-admin {
-            margin: 5px;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 90%;
-        }
-        
-        /* Tombol hapus semua akan disembunyikan secara default */
-        #hapus-semua-btn {
-            background-color: red;
-            color: white;
-            border: 1px black solid;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            display: none;
         }
     </style>
 </head>
@@ -322,17 +306,14 @@
                 1px -1px 0 #000,
                 -1px 1px 0 #000,
                 1px 1px 0 #000;">Sedang memuat...</div>
+    </div>
   
     <section class="pomo">
         <h1>PB. POMO Kuala</h1>
         <p id="tanggal-main" style="color: white; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;"></p>
-        
-        <p>Login sebagai admin:</p>
-        <input type="text" id="input-admin" placeholder="Masukkan nama admin (misal: Bima)">
 
         <form id="form-pendaftaran">
             <input type="text" id="nama-pendaftar" placeholder="Masukkan nama Anda" required>
-            <input type="text" id="kode-unik-pendaftar" placeholder="Buat kode unik Anda" required>
             <button type="submit">Daftar</button>
         </form>
         
@@ -346,7 +327,6 @@
                     <tr>
                         <th>No</th>
                         <th>Nama Pemain</th>
-                        <th>Kode Unik</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -368,13 +348,10 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const URL_APPS_SCRIPT_ANDA = 'https://script.google.com/macros/s/AKfycby1MFQ1vqjv9XBZrS0u9xG6XEjtxqWNHlojc1F_fBcVpylOsUp2mXdNdvcO32YOXnePcQ/exec';
-            const ADMIN_NAMA = 'BimasaaayanggAlya';
 
             const hargaLapangan = 100000;
-            const hargaShuttlecock = 135000;
+            const hargaShuttlecock = 150000;
             const totalHarga = hargaLapangan + hargaShuttlecock;
-            
-            let dataPendaftarSaatIni = [];
             
             const tampilkanHarga = (elementId, harga) => {
               const element = document.getElementById(elementId);
@@ -388,12 +365,12 @@
             tampilkanHarga('harga-shuttlecock', hargaShuttlecock);
 
             const hariIni = new Date();
-            const hariSaatIni = hariIni.getDay();
-            const hariTarget = 6;
+            const hariSaatIni = hariIni.getDay(); // 0 = Minggu, 1 = Senin, ..., 6 = Sabtu
+            const hariTarget = 6; // Sabtu
 
             let hariUntukDitambahkan = hariTarget - hariSaatIni;
             if (hariUntukDitambahkan <= 0) {
-              hariUntukDitambahkan += 0;
+              hariUntukDitambahkan += 7; // Jika hari ini sudah Sabtu, tambahkan 7 hari
             }
 
             const tanggalMain = new Date(hariIni);
@@ -413,46 +390,33 @@
             const formPendaftaran = document.getElementById('form-pendaftaran');
             const pesanStatus = document.getElementById('pesan-status');
             const hapusSemuaBtn = document.getElementById('hapus-semua-btn');
-            const inputAdmin = document.getElementById('input-admin');
             
+            // --- Logika untuk Loading dan Animasi ---
             const pomoSection = document.querySelector('.pomo');
             const loadingOverlay = document.getElementById('loading-overlay');
-            const shadow = document.querySelector('.bayangan');
-            const text = document.getElementById('loading-text')
-
-            // Fungsi untuk menampilkan tombol hapus semua (hanya untuk admin)
-            function tampilkanTombolHapusSemua() {
-                const isAdmin = inputAdmin.value.toLowerCase() === ADMIN_NAMA.toLowerCase();
-                hapusSemuaBtn.style.display = isAdmin ? 'inline-block' : 'none';
-            }
             
             function muatDaftarPendaftar() {
+                // Tampilkan overlay loading sebelum memuat data
                 loadingOverlay.style.display = 'block';
-                shadow.style.display = 'block';
                 pomoSection.classList.remove('show');
 
                 fetch(URL_APPS_SCRIPT_ANDA)
                     .then(response => response.json())
                     .then(data => {
-                        dataPendaftarSaatIni = data;
                         tableBody.innerHTML = '';
                         if (data && data.length > 0) {
                             data.forEach((pendaftar, index) => {
                                 const row = tableBody.insertRow();
                                 const noCell = row.insertCell(0);
                                 const namaCell = row.insertCell(1);
-                                const kodeUnikCell = row.insertCell(2);
-                                const aksiCell = row.insertCell(3);
-
+                                const aksiCell = row.insertCell(2);
                                 noCell.textContent = index + 1;
                                 namaCell.textContent = pendaftar['Nama'];
-                                kodeUnikCell.textContent = pendaftar['Kode Unik'];
                                 
                                 const deleteButton = document.createElement('button');
                                 deleteButton.textContent = 'Hapus';
                                 deleteButton.className = 'delete-btn';
-                                deleteButton.id = `hapus-${pendaftar['Nama'].replace(/\s/g, '-')}`;
-                                deleteButton.onclick = () => hapusPendaftar(pendaftar['Nama'], pendaftar['Kode Unik']);
+                                deleteButton.onclick = () => hapusPendaftar(pendaftar['Nama']);
                                 aksiCell.appendChild(deleteButton);
                             });
     
@@ -462,48 +426,42 @@
                             jumlahPendaftarSpan.textContent = jumlahPendaftar;
                             patunganPerOrangSpan.textContent = `Rp ${patunganPerOrang.toLocaleString('id-ID')}`;
                         } else {
-                            tableBody.innerHTML = '<tr><td colspan="4">belum ada pendaftar.</td></tr>';
+                            tableBody.innerHTML = '<tr><td colspan="3">Tidak ada pendaftar.</td></tr>';
                             jumlahPendaftarSpan.textContent = 0;
                             patunganPerOrangSpan.textContent = `Rp 0`;
                         }
-                        tampilkanTombolHapusSemua();
                     })
                     .catch(error => {
                         console.error('Error fetching data:', error);
-                        tableBody.innerHTML = '<tr><td colspan="4">Gagal memuat data. Periksa URL Apps Script Anda.</td></tr>';
+                        tableBody.innerHTML = '<tr><td colspan="3">Gagal memuat data. Periksa URL Apps Script Anda.</td></tr>';
                     })
                     .finally(() => {
+                        // Setelah loading selesai (berhasil atau gagal)
+                        // Sembunyikan overlay loading
                         loadingOverlay.style.display = 'none';
-                        shadow.style.display = 'none';
+                        // Tampilkan konten utama dengan animasi
                         pomoSection.classList.add('show');
-                        text.style.display = 'none'
                     });
             }
 
-            function hapusPendaftar(nama, kodeUnik) {
-                const konfirmasi = prompt(`Untuk menghapus pendaftar ${nama}, masukkan kode uniknya:`);
-                if (konfirmasi === null) {
+            function hapusPendaftar(nama) {
+                if (!confirm(`Apakah Anda yakin ingin menghapus pendaftar "${nama}"?`)) {
                     return;
                 }
+                pesanStatus.textContent = `Menghapus pendaftar "${nama}"...`;
                 
-                if (konfirmasi.toLowerCase() === kodeUnik.toLowerCase()) {
-                    pesanStatus.textContent = `Menghapus pendaftar "${nama}"...`;
-                    
-                    fetch(URL_APPS_SCRIPT_ANDA + `?action=delete&nama=${encodeURIComponent(nama)}`, {
-                        method: 'POST',
-                    })
-                    .then(response => response.text())
-                    .then(result => {
-                        pesanStatus.textContent = result;
-                        muatDaftarPendaftar();
-                    })
-                    .catch(error => {
-                        console.error('Error deleting data:', error);
-                        pesanStatus.textContent = 'Gagal menghapus pendaftar.';
-                    });
-                } else {
-                    pesanStatus.textContent = 'Kode unik salah. Penghapusan dibatalkan.';
-                }
+                fetch(URL_APPS_SCRIPT_ANDA + `?action=delete&nama=${encodeURIComponent(nama)}`, {
+                    method: 'POST',
+                })
+                .then(response => response.text())
+                .then(result => {
+                    pesanStatus.textContent = result;
+                    muatDaftarPendaftar();
+                })
+                .catch(error => {
+                    console.error('Error deleting data:', error);
+                    pesanStatus.textContent = 'Gagal menghapus pendaftar.';
+                });
             }
 
             function hapusSemuaPendaftar() {
@@ -530,38 +488,17 @@
             
             formPendaftaran.addEventListener('submit', function(event) {
                 event.preventDefault();
-                const namaPendaftar = document.getElementById('nama-pendaftar').value.trim();
-                const kodeUnikPendaftar = document.getElementById('kode-unik-pendaftar').value.trim();
-
-                if (!namaPendaftar || !kodeUnikPendaftar) {
-                    alert('Nama dan kode unik tidak boleh kosong.');
-                    return;
-                }
-
-                const namaSudahAda = dataPendaftarSaatIni.some(pendaftar => pendaftar['Nama'].toLowerCase() === namaPendaftar.toLowerCase());
-                const kodeUnikSudahAda = dataPendaftarSaatIni.some(pendaftar => pendaftar['Kode Unik'].toLowerCase() === kodeUnikPendaftar.toLowerCase());
-
-                if (namaSudahAda) {
-                    alert('Nama ini sudah terdaftar. Silakan gunakan nama lain atau hapus data yang sudah ada.');
-                    return;
-                }
-                
-                if (kodeUnikSudahAda) {
-                    alert('Kode unik ini sudah digunakan. Silakan gunakan kode unik lain.');
-                    return;
-                }
-
+                const namaPendaftar = document.getElementById('nama-pendaftar').value;
                 pesanStatus.textContent = 'Menambahkan pendaftar...';
 
                 fetch(URL_APPS_SCRIPT_ANDA, {
                     method: 'POST',
-                    body: JSON.stringify({ nama: namaPendaftar, kodeUnik: kodeUnikPendaftar }),
+                    body: JSON.stringify({ nama: namaPendaftar }),
                 })
                 .then(response => response.text())
                 .then(result => {
                     pesanStatus.textContent = result;
                     document.getElementById('nama-pendaftar').value = '';
-                    document.getElementById('kode-unik-pendaftar').value = '';
                     muatDaftarPendaftar();
                 })
                 .catch(error => {
@@ -570,7 +507,6 @@
                 });
             });
 
-            inputAdmin.addEventListener('input', tampilkanTombolHapusSemua);
             hapusSemuaBtn.addEventListener('click', hapusSemuaPendaftar);
         });
     </script>
