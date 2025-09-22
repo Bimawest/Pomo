@@ -366,11 +366,11 @@
 
             const hariIni = new Date();
             const hariSaatIni = hariIni.getDay(); // 0 = Minggu, 1 = Senin, ..., 6 = Senin
-            const hariTarget = 6; // Senin
+            const hariTarget = 1; // Senin
 
             let hariUntukDitambahkan = hariTarget - hariSaatIni;
             if (hariUntukDitambahkan <= 0) {
-              hariUntukDitambahkan += 7; // Jika hari ini sudah Sabtu, tambahkan 7 hari
+              hariUntukDitambahkan += 0; // Jika hari ini sudah Sabtu, tambahkan 7 hari
             }
 
             const tanggalMain = new Date(hariIni);
